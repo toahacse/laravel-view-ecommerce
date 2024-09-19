@@ -22,11 +22,11 @@ class ProfileController extends Controller
             'name'  => 'required|string|max:255',
             'email' => 'required|string|email|exists:users,email',
             'image' => 'max:5120|mimes:jpeg,png,jpg,gif',
-            'address' => 'required|string|max:255'
+            'address' => 'required|string|max:255',
         ]);
 
         if($validation->fails()){
-            return $this->error($validation->errors()->first(), 200, []);
+            return $this->error($validation->errors()->first(), 400, []);
         }else{
             if($request->hasFile('image')){
                 $image_name = 'images/'.$request->name.time().'.'.$request->image->extension();
