@@ -107,6 +107,8 @@
 <script src="{{asset('assets/js/index.js')}}"></script>
 <!--app JS-->
 <script src="{{asset('assets/js/app.js')}}"></script>
+<script src="{{asset('snackbar/dist/js-snackbar.js')}}"></script>
+
 <script src="https://developercodez.com/developerCorner/parsley/parsley.min.js"></script>
 
 <script>
@@ -123,5 +125,49 @@
                 $('#show_hide_password i').addClass("bx-show");
             }
         });
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('#formSubmit').on('submit', (function(e){
+            e.preventDefault();
+            if($(this).parsley().validate()){
+                const formData = new FormData(this);
+                const html='<button class="btn btn-primary" type="button" disabled=""> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>';
+                const html1='<input type="submit" id="submitButton" class="btn btn-primary px-4"/>';
+                
+                $('#submitButton').html(html);
+
+                $.ajax({
+                    type: 'POST',
+                    url : $(this).attr('action'),
+                    data:formData,
+                    cache:false,
+                    contentType:false,
+                    processData:false,
+                    success:function(result){
+                        if(result.status == 'success'){
+                            showAlert(result.status, result.message)
+                           
+                            $('#submitButton').html(html1);
+                        }else{
+                            showAlert(result.status, result.message)
+                            $('#submitButton').html(html1);
+                        }
+                        
+                    }
+                });
+            }
+        }));
+
+
+        function showAlert(status, message){
+            SnackBar({
+                status: status,
+                message: message,
+                position: 'br'
+            });
+        }
     });
 </script>
