@@ -138,9 +138,7 @@
                 const formData = new FormData(this);
                 const html='<button class="btn btn-primary" type="button" disabled=""> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>';
                 const html1='<input type="submit" id="submitButton" class="btn btn-primary px-4"/>';
-                
                 $('#submitButton').html(html);
-
                 $.ajax({
                     type: 'POST',
                     url : $(this).attr('action'),
@@ -151,8 +149,11 @@
                     success:function(result){
                         if(result.status == 'success'){
                             showAlert(result.status, result.message)
-                           
                             $('#submitButton').html(html1);
+
+                            if(result.data.reload != undefined){
+                                window.location.href = window.location.href;
+                            }
                         }else{
                             showAlert(result.status, result.message)
                             $('#submitButton').html(html1);
@@ -166,15 +167,40 @@
             }
         }));
 
-
-        function showAlert(status, message){
-            SnackBar({
-                status: status,
-                message: message,
-                position: 'br'
-            });
-        }
     });
+</script>
+
+<script>
+    function deleteData(id, table){
+        let text = "Are you sure want do delete";
+        if (confirm(text) == true) {
+            $.ajax({
+                type: 'GET',
+                url : "{{ url('admin/deleteData') }}/"+id+"/"+table+"",
+                data:'',
+                cache:false,
+                contentType:false,
+                processData:false,
+                success:function(result){
+                    console.log(result);
+                    
+                    if(result.status == 'success'){
+                        showAlert(result.status, result.message)
+                        if(result.data.reload != undefined){
+                            window.location.href = window.location.href;
+                        }
+                    }else{
+                        showAlert(result.status, result.message)
+                    }
+                },
+                error: function(result){
+                    showAlert(result.responseJSON.status, result.responseJSON.message)
+                }
+            });
+        } else {
+        
+        }
+    }
 </script>
 
 <script>
@@ -182,6 +208,7 @@
         $('#example').DataTable();
       } );
 </script>
+
 <script>
     $(document).ready(function() {
         var table = $('#example2').DataTable( {
@@ -192,4 +219,30 @@
         table.buttons().container()
             .appendTo( '#example2_wrapper .col-md-6:eq(0)' );
     } );
+</script>
+
+
+<script>
+    function showAlert(status, message){
+        SnackBar({
+            status: status,
+            message: message,
+            position: 'br'
+        });
+    }
+</script>
+
+<script>
+    $("#photo").on('change', function(event) {
+        const input = event.target;
+        const reader = new FileReader();
+        
+        reader.onload = function(){
+            $('#imgPreview').attr('src', reader.result);
+        };
+
+        if (input.files && input.files[0]) {
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
 </script>

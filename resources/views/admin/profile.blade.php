@@ -36,7 +36,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                    <img src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('assets/images/avatars/avatar-1.png') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                                    <img src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('assets/images/avatars/avatar-1.png') }}" id="imgPreview" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                                     <div class="mt-3">
                                         <h4>{{ Auth::user()->name }}</h4>
                                         <p class="text-secondary mb-1">Full Stack Developer</p>
@@ -139,7 +139,7 @@
                                             <h6 class="mb-0">Image</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input type="file" name="image" class="form-control" />
+                                            <input type="file" id="photo" name="image" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row">

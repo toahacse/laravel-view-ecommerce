@@ -12,7 +12,7 @@ class createViewFile extends Command
      *
      * @var string
      */
-    protected $signature = 'make:adminview {view}';
+    protected $signature = 'make:adminTableView {view}';
  
     /**
      * The console command description.
@@ -48,13 +48,13 @@ class createViewFile extends Command
                             <div class="page-content">
                                 <!--breadcrumb-->
                                 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                                    <div class="breadcrumb-title pe-3">User Profile</div>
+                                    <div class="breadcrumb-title pe-3">Add Name</div>
                                     <div class="ps-3">
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb mb-0 p-0">
                                                 <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                                                 </li>
-                                                <li class="breadcrumb-item active" aria-current="page">User Profilep</li>
+                                                <li class="breadcrumb-item active" aria-current="page">Add Name</li>
                                             </ol>
                                         </nav>
                                     </div>
@@ -73,6 +73,51 @@ class createViewFile extends Command
                                 </div>
                                 <!--end breadcrumb-->
 
+                                <h6 class="mb-0 text-uppercase">Add Name</h6>
+                                <hr/>
+                                <div class="col text-end">
+                                    <button type="button" class="btn btn-outline-primary px-5 mb-2"><i class="bx bx-plus mr-1"></i>Add </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="example2" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Text</th>
+                                                        <th>Link</th>
+                                                        <th>Image</th>
+                                                        <th>Created At</th>
+                                                        <th>Updated At</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($data as $list)
+                                                        <tr>
+                                                            <td>test</td>
+                                                            <td>test</td>
+                                                            <td>test</td>
+                                                            <td>test</td>
+                                                            <td>test</td>
+                                                            <td>test</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Text</th>
+                                                        <th>Link</th>
+                                                        <th>Image</th>
+                                                        <th>Created At</th>
+                                                        <th>Updated At</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endsection';
