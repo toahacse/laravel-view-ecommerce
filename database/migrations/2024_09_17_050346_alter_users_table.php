@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('phone')->after('remember_token')->nullable();
             $table->string('address')->after('phone')->nullable();
             $table->string('twitter_link')->after('address')->nullable();
-            $table->string('twitter_link')->after('twitter_link')->nullable();
+            $table->string('fb_link')->after('twitter_link')->nullable();
             $table->string('insta_link')->after('fb_link')->nullable();
             $table->string('image')->after('insta_link')->nullable();
         });

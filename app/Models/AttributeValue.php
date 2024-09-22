@@ -10,7 +10,12 @@ class AttributeValue extends Model
     use HasFactory;
 
     protected $fillable = [
-        'text',
+        'attribute_id',
         'value',
     ];
+
+    public function singleAttribute()
+    {
+         return $this->hasOne(Attribute::class, 'id', 'attribute_id');
+    }
 }

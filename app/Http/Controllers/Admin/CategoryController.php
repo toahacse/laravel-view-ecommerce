@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\HomeBanner;
+use App\Models\Category;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
-class HomeBannerController extends Controller
+class CategoryController extends Controller
 {
     use ApiResponse;
     
     public function index(){
-        $data = HomeBanner::get();
-        return view('admin/HomeBanner.index', compact('data'));
+        $data = Category::get();
+        return view('admin/Category.index', compact('data'));
     }
 
     public function store(Request $request){
         $validation = Validator::make($request->all(), [
-            'text'  => 'required|string|max:255',
+            'name'  => 'required|string|max:255',
+            'slug'  => 'required|string|max:255',
             'image' => 'max:5120|mimes:jpeg,png,jpg,gif',
-            'link'  => 'required|string|max:255',
             'id'    => 'required|string|max:255',
         ]);
 
@@ -31,23 +31,23 @@ class HomeBannerController extends Controller
         }else{
             if($request->hasFile('image')){
                 if($request->id > 0){
-                   $image = HomeBanner::where('id', $request->id)->first();
+                   $image = Category::where('id', $request->id)->first();
                    $image_path = "images/".$image->image."";
                    if(File::exists($image_path)){
                     File::delete($image_path);
                    }
                 }
-                $image_name = 'images/'.$request->name.time().'.'.$request->image->extension();
+                $image_name = time().'.'.$request->image->extension();
                 $request->image->move(public_path('images/'), $image_name);
             }elseif($request->id>0){
-                $image_name = HomeBanner::where('id', $request->id)->pluck('image')->first();
+                $image_name = Category::where('id', $request->id)->pluck('image')->first();
             }
  
-            HomeBanner::updateOrCreate(
+            Category::updateOrCreate(
                 ['id'=> $request->id],
                 [
-                    'text' => $request->text,
-                    'link' => $request->link,
+                    'name' => $request->name,
+                    'slug' => $request->slug,
                     'image' => $image_name,
                 ]
             );

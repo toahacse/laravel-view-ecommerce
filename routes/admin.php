@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function() {
@@ -31,8 +32,14 @@ Route::post('updateColor', [ColorController::class, 'store']);
 //manage-attribute route
 Route::get('attribute-name', [AttributeController::class, 'index_attribute_name']);
 Route::post('updateAttributeName', [AttributeController::class, 'store_attribute_name']);
+
 Route::get('attribute-value', [AttributeController::class, 'index_attribute_value']);
 Route::post('updateAttributeValue', [AttributeController::class, 'store_attribute_value']);
+
+//manage-color route
+Route::get('category', [CategoryController::class, 'index']);
+Route::post('updateCategory', [CategoryController::class, 'store']);
+
 
 //delete Data
 Route::get('deleteData/{id?}/{table?}', [DashboardController::class, 'deleteData']);
