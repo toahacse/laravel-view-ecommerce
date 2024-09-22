@@ -4,13 +4,13 @@
         <div class="page-content">
             <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">Home Banner</div>
+                <div class="breadcrumb-title pe-3">Color</div>
                 <div class="ps-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Home Banner</li>
+                            <li class="breadcrumb-item active" aria-current="page">Color</li>
                         </ol>
                     </nav>
                 </div>
@@ -29,10 +29,10 @@
             </div>
             <!--end breadcrumb-->
 
-            <h6 class="mb-0 text-uppercase">Home Banner</h6>
+            <h6 class="mb-0 text-uppercase">Color</h6>
             <hr/>
             <div class="col text-end">
-                <button type="button" onclick="saveData('0', '', '', '')" class="btn btn-outline-primary px-5 mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-plus mr-1"></i>Add </button>
+                <button type="button" onclick="saveData('0', '', '')" class="btn btn-outline-primary px-5 mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-plus mr-1"></i>Add </button>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -42,8 +42,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Text</th>
-                                    <th>Link</th>
-                                    <th>Image</th>
+                                    <th>Value</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -52,13 +51,10 @@
                                     <tr>
                                         <td>{{ $list->id }}</td>
                                         <td>{{ $list->text }}</td>
-                                        <td>{{ $list->link }}</td>
+                                        <td style="background-color:{{ $list->value }}">{{ $list->value }}</td>
                                         <td>
-                                            <img src="{{ URL::asset('images').'/'.$list->image}}" height="100px" width="100px" alt="">
-                                        </td>
-                                        <td>
-                                            <button type="button" onclick="saveData('{{ $list->id }}', '{{ $list->text }}', '{{ $list->link }}', '{{ $list->image }}')" class="btn btn-outline-primary mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-pen mr-1"></i>Edit </button>
-                                            <button type="button" onclick="deleteData('{{ $list->id }}', 'home_banners')" class="btn btn-outline-danger mb-2" ><i class="bx bx-trash mr-1"></i>Delete </button>
+                                            <button type="button" onclick="saveData('{{ $list->id }}', '{{ $list->text }}', '{{ $list->value }}')" class="btn btn-outline-primary mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-pen mr-1"></i>Edit </button>
+                                            <button type="button" onclick="deleteData('{{ $list->id }}', 'colors')" class="btn btn-outline-danger mb-2" ><i class="bx bx-trash mr-1"></i>Delete </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -67,8 +63,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Text</th>
-                                    <th>Link</th>
-                                    <th>Image</th>
+                                    <th>Value</th>
                                     <th>Action</th>
                                 </tr>
                             </tfoot>
@@ -84,10 +79,10 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Home Banner</h5>
+                    <h5 class="modal-title" id="addModalLabel">Color</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formSubmit" action="{{ url('admin/updateHomeBanner') }}" method="post" enctype="multipart/form-data">
+                <form id="formSubmit" action="{{ url('admin/updateColor') }}" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                             @csrf
                             <div class="border p-4 rounded">
@@ -104,30 +99,14 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="link" class="col-sm-3 col-form-label">Link</label>
+                                    <label for="value" class="col-sm-3 col-form-label">Hex Code</label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="link" class="form-control" id="link" placeholder="Enter Link">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="image" class="col-sm-3 col-form-label">Image</label>
-                                    <div class="col-sm-9">
-                                        <input type="file" name="image" class="form-control" id="photo" required>
-                                    </div>
-                                    <div id="image_key">
-                                        <img src="{{ URL::asset('images/upload-image.png') }}" id="imgPreview" height="200px" width="200px" alt="">
+                                        <input type="text" name="value" class="form-control" id="value" placeholder="Enter Value">
                                     </div>
                                 </div>
 
                                 <input type="hidden" name="id" id="id">
                                 
-                                {{-- <div class="row">
-                                    <label class="col-sm-3 col-form-label"></label>
-                                    <div class="col-sm-9">
-                                        <button type="submit" class="btn btn-info px-5">Register</button>
-                                    </div>
-                                </div> --}}
-                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -141,20 +120,10 @@
     </div>
 
     <script>
-        function saveData(id, text, link, image){
+        function saveData(id, text, value){
             $('#id').val(id);
             $('#text').val(text);
-            $('#link').val(link);
-            if(image == ''){
-                var key_image = "{{ URL::asset('images/upload-image.png') }}";
-                $('#photo').addAttr('required');
-            }else{
-                var key_image = "{{ URL::asset('images')}}/"+image+"";
-                $('#photo').removeAttr('required');
-            }
-         
-            const html = '<img src="'+key_image+'" id="imgPreview" height="200px" width="200px" alt="">'
-            $('#image_key').html(html);
+            $('#value').val(value);
         }
     </script>
 @endsection
