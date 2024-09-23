@@ -5,19 +5,18 @@ use Illuminate\Support\Facades\File;
 
 trait SaveFile
 {
-    protected function saveFile($file, $prevImage='', $path='', $table='', $id='') {
-        if($table != ''){
-            $image = DB::table(''.$table.'')->where('id', $id)->first();
-
-            $image_path = "images/".$image->image."";
+    protected function saveImage($file, $prevImagePath='', $path='') {
+        if($prevImagePath != ''){
+            $image_path = $prevImagePath;
             if(File::exists($image_path)){
                 File::delete($image_path);
             }
         }
-        $image_name = time().'.'.$file->extension();
         if( $path == ''){
+            $image_name = time().'.'.$file->extension();
             $file->move(public_path('images/'), $image_name);
         }else{
+            $image_name = ''.$path.'/'.time().'.'.$file->extension();
             $file->move(public_path(''.$path.'/'), $image_name);
         }
 

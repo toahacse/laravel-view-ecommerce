@@ -32,7 +32,7 @@
             <h6 class="mb-0 text-uppercase">Category</h6>
             <hr/>
             <div class="col text-end">
-                <button type="button" onclick="saveData('0', '', '', '')" class="btn btn-outline-primary px-5 mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-plus mr-1"></i>Add </button>
+                <button type="button" onclick="saveData('0', '', '', '', '')" class="btn btn-outline-primary px-5 mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-plus mr-1"></i>Add </button>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -54,10 +54,10 @@
                                         <td>{{ $list->name }}</td>
                                         <td>{{ $list->slug }}</td>
                                         <td>
-                                            <img src="{{ URL::asset('images').'/'.$list->image}}" height="100px" width="100px" alt="">
+                                            <img src="{{ URL::asset($list->image)}}" height="100px" width="100px" alt="">
                                         </td>
                                         <td>
-                                            <button type="button" onclick="saveData('{{ $list->id }}', '{{ $list->name }}', '{{ $list->slug }}', '{{ $list->image }}')" class="btn btn-outline-primary mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-pen mr-1"></i>Edit </button>
+                                            <button type="button" onclick="saveData('{{ $list->id }}', '{{ $list->name }}', '{{ $list->slug }}', '{{ $list->image }}', {{ $list->parent_category_id }})" class="btn btn-outline-primary mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-pen mr-1"></i>Edit </button>
                                             <button type="button" onclick="deleteData('{{ $list->id }}', 'categories')" class="btn btn-outline-danger mb-2" ><i class="bx bx-trash mr-1"></i>Delete </button>
                                         </td>
                                     </tr>
@@ -110,6 +110,18 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
+                                    <label for="name" class="col-sm-3 col-form-label">Select Parent Category</label>
+                                    <div class="col-sm-9">
+                                        {{-- <input type="text" name="name" class="form-control" id="name" placeholder="Enter Attribute"> --}}
+                                        <select class="form-control" name="parent_category_id" id="parent_category_id">
+                                            <option value="0">Select Parent Category</option>
+                                            @foreach($data as $category)
+                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
                                     <label for="image" class="col-sm-3 col-form-label">Image</label>
                                     <div class="col-sm-9">
                                         <input type="file" name="image" class="form-control" id="photo" required>
@@ -141,17 +153,23 @@
     </div>
 
     <script>
-        function saveData(id, name, slug, image){
+        var checkId;
+        function saveData(id, name, slug, image, parent_category_id){
+            if(checkId != 0){
+                $('#parent_category_id option[value="'+checkId+'"]').show();
+            }
+            checkId = id;
             $('#id').val(id);
             $('#name').val(name);
             $('#slug').val(slug);
-            console.log(image);
+            $('#parent_category_id').val(parent_category_id);
+            $('#parent_category_id option[value="'+id+'"]').hide();
             
             if(image == ''){
                 var key_image = "{{ URL::asset('images/upload-image.png') }}";
                 $('#photo').attr('required');
             }else{
-                var key_image = "{{ URL::asset('images')}}/"+image+"";
+                var key_image = "{{ URL::asset('/')}}"+image+"";
                 $('#photo').removeAttr('required');
             }
          

@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function() {
@@ -39,6 +42,22 @@ Route::post('updateAttributeValue', [AttributeController::class, 'store_attribut
 //manage-color route
 Route::get('category', [CategoryController::class, 'index']);
 Route::post('updateCategory', [CategoryController::class, 'store']);
+
+Route::get('category-attribute', [CategoryController::class, 'index_category_attribute']);
+Route::post('updateCategoryAttribute', [CategoryController::class, 'store_category_attribute']);
+
+//brand route
+Route::get('brand', [BrandController::class, 'index']);
+Route::post('updateBrand', [BrandController::class, 'store']);
+
+//Tax route
+Route::get('tax', [TaxController::class, 'index']);
+Route::post('updateTax', [TaxController::class, 'store']);
+
+//Product route
+Route::get('product', [ProductController::class, 'index']);
+Route::get('manage-product/{id?}', [ProductController::class, 'view_product']);
+Route::post('updateProduct', [ProductController::class, 'store']);
 
 
 //delete Data

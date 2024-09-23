@@ -18,12 +18,6 @@
                 </div>
                 <div class="menu-title">Dashboard</div>
             </a>
-            <!-- <ul>
-                <li> <a href="index.html"><i class="bx bx-right-arrow-alt"></i>Default</a>
-                </li>
-                <li> <a href="index2.html"><i class="bx bx-right-arrow-alt"></i>Alternate</a>
-                </li>
-            </ul> -->
         </li>
         <li class="menu-label">Home</li>
         <li>
@@ -66,9 +60,39 @@
             </a>
             <ul>
                 <li> <a href="{{ url('admin/category') }}"><i class="bx bx-right-arrow-alt"></i>Category</a></li>
+                <li> <a href="{{ url('admin/category-attribute') }}"><i class="bx bx-right-arrow-alt"></i>Category Attribute</a></li>
             </ul>
         </li>
-    
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-cart'></i>
+                </div>
+                <div class="menu-title">Product</div>
+            </a>
+            <ul>
+                <li> <a href="{{ url('admin/product') }}"><i class="bx bx-right-arrow-alt"></i>Product</a></li>
+                {{-- <li> <a href="{{ url('admin/category-attribute') }}"><i class="bx bx-right-arrow-alt"></i>Category Attribute</a></li> --}}
+            </ul>
+        </li>
+
+        <li class="menu-label">Brand</li>
+        <li>
+            <a href="{{ url('admin/brand') }}">
+                <div class="parent-icon"><i class='bx bx-cookie'></i>
+                </div>
+                <div class="menu-title">Brand</div>
+            </a>
+        </li>
+
+        <li class="menu-label">Tax</li>
+        <li>
+            <a href="{{ url('admin/tax') }}">
+                <div class="parent-icon"><i class='bx bx-cookie'></i>
+                </div>
+                <div class="menu-title">Tax</div>
+            </a>
+        </li>
+
         <li class="menu-label">Pages</li>
         
         <li>
