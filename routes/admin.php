@@ -58,6 +58,7 @@ Route::post('updateTax', [TaxController::class, 'store']);
 Route::get('product', [ProductController::class, 'index']);
 Route::get('manage-product/{id?}', [ProductController::class, 'view_product']);
 Route::post('updateProduct', [ProductController::class, 'store']);
+Route::post('getAttributes', [ProductController::class, 'getAttributes']);
 
 
 //delete Data

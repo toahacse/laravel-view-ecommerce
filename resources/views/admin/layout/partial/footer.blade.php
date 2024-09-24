@@ -110,6 +110,7 @@
 <!--app JS-->
 <script src="{{asset('assets/js/app.js')}}"></script>
 <script src="{{asset('snackbar/dist/js-snackbar.js')}}"></script>
+<script src="{{asset('multiSelect/jquery.multi-select.js')}}"></script>
 
 <script src="https://developercodez.com/developerCorner/parsley/parsley.min.js"></script>
 
@@ -245,4 +246,34 @@
             reader.readAsDataURL(input.files[0]);
         }
     });
+</script>
+
+
+<script>
+    $(function(){
+        $('#attribute_id').multiSelect();
+        $('#ice-cream').multiSelect();
+        $('#line-wrap-example').multiSelect({
+            positionMenuWithin: $('.position-menu-within')
+        });
+
+        $('#categories').multiSelect({
+            noneText: 'All categories',
+            presets:[
+                {
+                    name: 'All categories',
+                    all: true
+                },
+                {
+                    name: 'My categories',
+                    options: ['a', 'c']
+                }
+            ]
+        });
+
+        $('#modal-example').multiSelect({
+            'modalHTML': '<dev class"multi-select-modal">'
+        })
+
+    })
 </script>

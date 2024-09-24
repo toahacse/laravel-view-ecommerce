@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="https://developercodez.com/developerCorner/parsley/parsley.css" >
     <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 	<link rel="stylesheet" href="{{asset('snackbar/dist/js-snackbar.css')}}" />
+	<link rel="stylesheet" href="{{asset('multiSelect/example-styles.css')}}" />
 
 	<title>Rocker - Bootstrap 5 Admin Dashboard Template</title>
 </head>

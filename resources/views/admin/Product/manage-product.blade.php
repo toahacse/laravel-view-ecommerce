@@ -47,6 +47,17 @@
                         </div>
                         <hr>
                         <div class="row mb-3">
+                            <label for="name" class="col-sm-3 col-form-label">Select Brand</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="brand_id" id="brand_id">
+                                    <option value="0">Select Brand</option>
+                                    @foreach($brands as $brand)
+                                    <option value="{{$brand->id}}">{{$brand->text}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label for="name" class="col-sm-3 col-form-label">Select Category</label>
                             <div class="col-sm-9">
                                 <select class="form-control"  name="category_id" id="category_id">
@@ -58,16 +69,12 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="name" class="col-sm-3 col-form-label">Select Brand</label>
+                            <label for="attribute_id" class="col-sm-3 col-form-label">Attribute</label>
                             <div class="col-sm-9">
-                                <select class="form-control" name="brand_id" id="brand_id">
-                                    <option value="0">Select Brand</option>
-                                    @foreach($brands as $brand)
-                                    <option value="{{$brand->id}}">{{$brand->text}}</option>
-                                    @endforeach
-                                </select>
+                               <span id="multiAttr"></span>
                             </div>
                         </div>
+                        
                         <div class="row mb-3">
                             <label for="name" class="col-sm-3 col-form-label">Product Name</label>
                             <div class="col-sm-9">
@@ -131,36 +138,47 @@
         </div>
     </div>
 
+
     <script>
-         var editor = CKEDITOR.replace('description', {
-            extraPlugins: 'uploadimage', // Ensure the uploadimage plugin is enabled
-            filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images', // Adjust the URL path to your server
-            filebrowserBrowseUrl: '/ckfinder/ckfinder.html',
-            filebrowserImageBrowseUrl: '/ckfinder/ckfinder.html?type=Images',
-            filebrowserUploadMethod: 'form'
-        });
-
-        CKFinder.setupCKEditor(editor);
-
         $("#category_id").change(function(e) {
-            e.preventDefault()
-            if($(this).parsley().validate()) {
-                var url = "{{ url('registration_process') }}";
-                $.ajax({
-                    url: url,
-                    data: $('#formSubmit').serialize(),
-                    type: 'post',
-                    success: function(result) {
-                        if (result.status == 200) {
-                            alert('Succesfully submit');
-                        }else{
-                            console.log(result);
-                            alert(result.message);
-                        }
+            const category_id = $("#category_id").val();
+            var url = "{{ url('admin/getAttributes') }}";
+            var html = '';
+            $.ajax({
+                url: url,
+                headers:{
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: {
+                    'category_id' : category_id
+                },
+                type: 'post',
+                success: function(result) {
+                    if(result.status == 'success'){
+                        html += ' <select class="form-control"  name="attribute_id[]" id="attribute_id" multiple>'
+                        jQuery.each(result.data, function(key, val){
+                            jQuery.each(val.values, function(attrKey, attrVal){
+                                html +='<option value="'+attrVal.id+'">'+val.attribute.name+'('+attrVal.value+')</option>';
+                            });
+                        });
+                        html += '</select>'
+ 
+                        $('#multiAttr').html(html);
+                        $('#attribute_id').multiSelect();
+                        showAlert(result.status, result.message)
+                    }else{
+                        showAlert(result.status, result.message)
                     }
-                });
-            }
+                },
+                error: function(result){
+                    showAlert(result.responseJSON.status, result.responseJSON.message)
+                }
+            });
         });
-
+    </script>
+    
+    <script>
+        var editor = CKEDITOR.replace('description');
+        CKFinder.setupCKEditor(editor);
     </script>
 @endsection
