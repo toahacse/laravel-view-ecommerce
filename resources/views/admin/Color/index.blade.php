@@ -83,8 +83,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formSubmit" action="{{ url('admin/updateColor') }}" method="post" enctype="multipart/form-data">
+                    @csrf
                     <div class="modal-body">
-                            @csrf
                             <div class="border p-4 rounded">
                                 <div class="card-title d-flex align-items-center">
                                     <div><i class="bx bxs-user me-1 font-22 text-info"></i>

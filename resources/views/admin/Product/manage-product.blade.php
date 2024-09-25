@@ -46,92 +46,178 @@
                             <h5 class="mb-0 text-info">Add Product</h5>
                         </div>
                         <hr>
-                        <div class="row mb-3">
-                            <label for="name" class="col-sm-3 col-form-label">Select Brand</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" name="brand_id" id="brand_id">
-                                    <option value="0">Select Brand</option>
-                                    @foreach($brands as $brand)
-                                    <option value="{{$brand->id}}">{{$brand->text}}</option>
-                                    @endforeach
-                                </select>
+
+                        <form id="formSubmit" action="{{ url('admin/updateProduct') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id" id="id" value="{{ $id }}">
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Select Brand</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="brand_id" id="brand_id">
+                                        <option value="0">Select Brand</option>
+                                        @foreach($brands as $brand)
+                                        <option value="{{$brand->id}}" {{ $brand->id == $data->brand_id ? 'selected' : '' }}>{{$brand->text}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="name" class="col-sm-3 col-form-label">Select Category</label>
-                            <div class="col-sm-9">
-                                <select class="form-control"  name="category_id" id="category_id">
-                                    <option value="0">Select Category</option>
-                                    @foreach($categories as $category)
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Select Category</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control"  name="category_id" id="category_id">
+                                        <option value="0">Select Category</option>
+                                        @foreach($categories as $category)
+                                        <option value="{{$category->id}}" {{ $category->id == $data->category_id ? 'selected' : '' }}>{{$category->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="attribute_id" class="col-sm-3 col-form-label">Attribute</label>
-                            <div class="col-sm-9">
-                               <span id="multiAttr"></span>
+                            <div class="row mb-3">
+                                <label for="attribute_id" class="col-sm-3 col-form-label">Attribute</label>
+                                <div class="col-sm-9">
+                                <span id="multiAttr"></span>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <label for="name" class="col-sm-3 col-form-label">Product Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="name" class="form-control" value="{{ $data->name }}" id="name" placeholder="Enter product name">
+                            
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Product Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="name" class="form-control" value="{{ $data->name }}" id="name" placeholder="Enter product name">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="slug" class="col-sm-3 col-form-label">Slug</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="slug" class="form-control" value="{{ $data->slug }}" id="slug" placeholder="Enter slug">
+                            <div class="row mb-3">
+                                <label for="slug" class="col-sm-3 col-form-label">Slug</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="slug" class="form-control" value="{{ $data->slug }}" id="slug" placeholder="Enter slug">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="item_code" class="col-sm-3 col-form-label">Item Code</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="item_code" class="form-control" value="{{ $data->item_code }}" id="item_code" placeholder="Enter item code">
+                            <div class="row mb-3">
+                                <label for="item_code" class="col-sm-3 col-form-label">Item Code</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="item_code" class="form-control" value="{{ $data->item_code }}" id="item_code" placeholder="Enter item code">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="keywords" class="col-sm-3 col-form-label">Keywords</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="keywords" class="form-control" value="{{ $data->keywords }}" id="keywords" placeholder="Enter keywords">
+                            <div class="row mb-3">
+                                <label for="keywords" class="col-sm-3 col-form-label">Keywords</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="keywords" class="form-control" value="{{ $data->keywords }}" id="keywords" placeholder="Enter keywords">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="name" class="col-sm-3 col-form-label">Select Tax</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" name="tax_id" id="tax_id">
-                                    <option value="0">Select Tax</option>
-                                    @foreach($taxes as $tax)
-                                    <option value="{{$tax->id}}">{{$tax->text}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Select Tax</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="tax_id" id="tax_id">
+                                        <option value="0">Select Tax</option>
+                                        @foreach($taxes as $tax)
+                                        <option value="{{$tax->id}}" {{ $tax->id == $data->tax_id ? 'selected' : '' }}>{{$tax->text}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="description" class="col-sm-3 col-form-label">Description</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description">{{ $data->description }}</textarea>
+                            <div class="row mb-3">
+                                <label for="description" class="col-sm-3 col-form-label">Description</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Description">{{ $data->description }}</textarea>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="image" class="col-sm-3 col-form-label">Image</label>
-                            <div class="col-sm-9">
-                                <input type="file" name="image" class="form-control" id="photo" required>
+                            <div class="row mb-3">
+                                <label for="image" class="col-sm-3 col-form-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input type="file" name="image" class="form-control" id="photo" required>
+                                    <div id="image_key" class="d-flex justify-content-center align-items-center mt-2">
+                                        <img @if($data->image) src="{{ URL::asset($data->image)}}" @else src="{{ URL::asset('images/upload-image.png') }}" @endif id="imgPreview" height="200px" width="200px" alt="">
+                                    </div>
+                                </div>
                             </div>
-                            <div id="image_key">
-                                <img src="{{ URL::asset('images/upload-image.png') }}" id="imgPreview" height="200px" width="200px" alt="">
+
+                            <div class="row mb-3">
+                                <label for="image" class="col-sm-3 col-form-label">Product Attribute</label>
+                                
+                                <div class="row col-sm-9">
+                                    <div class="col-sm-3 mt-2">
+                                        <button type="button" id="addAttributeButton" class="btn btn-info form-control">Add Attribute</button>
+                                    </div>
+
+                                    @php
+                                        $count = 1;
+                                        $imageCount=rand(111, 999);
+                                    @endphp
+                                    <div class="row" id="addAttr">
+                                        <div class="row" id="addAttr_{{ $count }}">
+                                            <div class="col-sm-3 mt-2">
+                                                <select class="form-control" name="color_id[]" id="color_id">
+                                                    <option value="0">Select Color</option>
+                                                    @foreach($colors as $color)
+                                                    <option style="background-color:{{ $color->value }}" value="{{$color->id}}">{{$color->text}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <select class="form-control" name="size_id[]" id="size_id">
+                                                    <option value="0">Select Size</option>
+                                                    @foreach($sizes as $size)
+                                                    <option value="{{$size->id}}">{{$size->text}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="sku[]" class="form-control" id="sku" required placeholder="Enter SKU">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="mrp[]" class="form-control" id="mrp" required placeholder="Enter MRP">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="price[]" class="form-control" id="price" required placeholder="Enter Price">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="length[]" class="form-control" id="length" required placeholder="Enter Length">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="breadth[]" class="form-control" id="breadth" required placeholder="Enter Breadth">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="height[]" class="form-control" id="height" required placeholder="Enter Height">
+                                            </div>
+                                            <div class="col-sm-3 mt-2">
+                                                <input type="text" name="weight[]" class="form-control" id="weight" required placeholder="Enter Weight">
+                                            </div>
+                                            <div class="row mb-3 mt-3 m-0 p-0">
+                                                <label for="image" class="col-sm-3 col-form-label">Product Image</label>
+                                                
+                                                <div class="row col-sm-9">
+                                                    <input type="hidden" name="imageValue[]" value="{{ $count }}">
+                                                    <div class="col-sm-3">
+                                                        <button type="button" onclick="addAttrImage('attrImage_{{ $count }}', {{ $count }})" class="btn btn-info form-control">Add Image</button>
+                                                    </div>
+                                                    <div id="attrImage_{{ $count }}">
+                                                        <div id="attrImage_{{ $imageCount }}">
+                                                            <div class="col-sm-3">
+                                                                <input type="file" name="attr_image_{{ $count }}[]" class="form-control" id="photo" required>
+                                                            </div>
+                                                            @if($count!=1)
+                                                                <button type="button" onclick="removeAttr('attrImage_{{ $imageCount }}')" class="btn btn-danger form-control">Remove</button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if($count!=1)
+                                                <button type="button" onclick="removeAttr('addAttr_{{ $count }}')" class="btn btn-danger form-control">Remove Attribute</button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                            
+                            <div class="row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    <span id="submitButton">
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-9">
-                                <button type="submit" class="btn btn-info px-5">Register</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -139,6 +225,87 @@
     </div>
 
 
+    <script>
+        var imageCount = 1999;
+        function addAttrImage(id, count){
+            imageCount++;
+            let html = `<div id="attrImage_${ imageCount }">
+                            <div class="col-sm-3">
+                                    <input type="file" name="attr_image_${count}[]" class="form-control" id="photo" required>
+                                </div>
+                                <button type="button" onclick="removeAttr('attrImage_${ imageCount }')" class="btn btn-danger form-control">Remove</button>
+                            </div>`;
+
+            // let html = `<input type="file" name="attr_image[]" class="form-control" id="photo" required>`;
+            $('#'+id+'').append(html);       
+        }
+    </script>
+    <script>
+        function removeAttr(id){
+            $('#'+id+'').remove()
+        }
+    </script>
+  
+    <script>
+        var count = 111;
+       $('#addAttributeButton').click(function(e){
+        count++;
+        imageCount++;
+        let html = '';
+        let sizeData = $('#size_id').html();
+        let colorData = $('#color_id').html();
+        
+        html += `<div class="row" id="addAttr_${ count }">`;
+        html += '<div class="col-sm-3 mt-2"><select class="form-control" name="color_id[]">'+colorData+'</select></div>';
+        html += '<div class="col-sm-3 mt-2"><select class="form-control" name="size_id[]">'+sizeData+'</select></div>';
+        html += `<div class="col-sm-3 mt-2">
+                    <input type="text" name="sku[]" class="form-control" id="sku" required placeholder="Enter SKU">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="mrp[]" class="form-control" id="mrp" required placeholder="Enter MRP">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="price[]" class="form-control" id="price" required placeholder="Enter Price">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="length[]" class="form-control" id="length" required placeholder="Enter Length">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="breadth[]" class="form-control" id="breadth" required placeholder="Enter Breadth">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="height[]" class="form-control" id="height" required placeholder="Enter Height">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <input type="text" name="weight[]" class="form-control" id="weight" required placeholder="Enter Weight">
+                </div>
+                <div class="row mb-3 mt-3 m-0 p-0">
+                    <label for="image" class="col-sm-3 col-form-label">Product Image</label>
+                    
+                    <div class="row col-sm-9">
+                        <input type="hidden" name="imageValue[]" value="${ count }">
+                        <div class="col-sm-3">
+                            <button type="button" onclick="addAttrImage('attrImage_${ count }', ${ count })" class="btn btn-info form-control">Add Image</button>
+                        </div>
+                        <div id="attrImage_${ count }">
+                            <div id="attrImage_${ imageCount }">
+                                <div class="col-sm-3">
+                                    <input type="file" name="attr_image_${ count }[]" class="form-control" id="photo" required>
+                                </div>
+                                <button type="button" onclick="removeAttr('attrImage_${ imageCount }')" class="btn btn-danger form-control">Remove</button>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="removeAttr('addAttr_${ count }')" class="btn btn-danger form-control">Remove Attribute</button>
+                `;
+        html += `</div>`;
+        
+        $('#addAttr').append(html);
+        
+       }); 
+    </script>
     <script>
         $("#category_id").change(function(e) {
             const category_id = $("#category_id").val();
@@ -165,7 +332,7 @@
  
                         $('#multiAttr').html(html);
                         $('#attribute_id').multiSelect();
-                        showAlert(result.status, result.message)
+                        // showAlert(result.status, result.message)
                     }else{
                         showAlert(result.status, result.message)
                     }
