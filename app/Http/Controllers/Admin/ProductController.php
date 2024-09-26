@@ -40,6 +40,7 @@ class ProductController extends Controller
         $colors = Color::get();
         $sizes = Size::get();
         $taxes = Tax::get();
+
         if ($id == 0) {
             //new Product
             $data = new Product();
@@ -63,7 +64,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+        // echo "<pre>";
+        // print_r($request->all());
+        // die();
         $validation = Validator::make($request->all(), [
             'name'  => 'required|string|max:255',
             'slug'  => 'required|string|max:255',
@@ -128,44 +131,50 @@ class ProductController extends Controller
                     
                     foreach ($request->sku as $key => $val) {
                         $productAttr = ProductAttr::updateOrCreate(
-                                            [
-                                                // 'id' => $paid,
-                                                'id' => '0',
-                                            ],
-                                            [
-                                                'product_id' => $product->id,
-                                                'color_id'   => $request->color_id[$key],
-                                                'size_id'    => $request->size_id[$key],
-                                                'sku'        => $request->sku[$key],
-                                                'mrp'        => $request->mrp[$key],
-                                                'price'      => $request->price[$key],
-                                                'length'     => $request->length[$key],
-                                                'breadth'    => $request->breadth[$key],
-                                                'height'     => $request->height[$key],
-                                                'weight'     => $request->weight[$key],
-                                            ]
-                                        );
-
-                                        
+                            [
+                                // 'id' => $paid,
+                                'id' => $request->productAttributeId[$key],
+                            ],
+                            [
+                                'product_id' => $product->id,
+                                'color_id'   => $request->color_id[$key],
+                                'size_id'    => $request->size_id[$key],
+                                'sku'        => $request->sku[$key],
+                                'mrp'        => $request->mrp[$key],
+                                'price'      => $request->price[$key],
+                                'length'     => $request->length[$key],
+                                'breadth'    => $request->breadth[$key],
+                                'height'     => $request->height[$key],
+                                'weight'     => $request->weight[$key],
+                            ]
+                        );
+                 
+                        ProductAttrImage::whereIn('id', $request->remove_image_id)->delete();
                         $imageVal = 'attr_image_'.$attrImage[$key];
-                        
-                        ProductAttrImage::where(['product_id' =>$product->id, 'product_attr_id' => $productAttr->id])->delete();
-                        foreach($request->$imageVal as $key=>$val){
-                            $image_name = "images/productsAttr/".$this->getRandomValue().$request->name . '-' . time() . '.' . $val->extension();
-                            $val->move(public_path("images/productsAttr/"), $image_name);
-
-                            ProductAttrImage::updateOrCreate(
-                                [
-                                    'product_id' => $product->id,
-                                    'product_attr_id' => $productAttr->id,
-                                    'image' => $image_name
-                                ],
-                                [
-                                    'product_id' => $product->id,
-                                    'product_attr_id' => $productAttr->id,
-                                    'image' => $image_name
-                                ]
-                            );
+                        $imageValId = 'attr_image_id_'.$attrImage[$key];
+                        if($request->$imageVal){
+                            if($request->$imageValId){
+                                ProductAttrImage::where(['product_id' =>$product->id, 'product_attr_id' => $productAttr->id])->whereNotIn('id', $request->$imageValId)->delete();
+                            }else{
+                                ProductAttrImage::where(['product_id' =>$product->id, 'product_attr_id' => $productAttr->id])->delete();
+                            }
+                            foreach($request->$imageVal as $key=>$val){
+                                $image_name = "images/productsAttr/".$this->getRandomValue().$request->name . '-' . time() . '.' . $val->extension();
+                                $val->move(public_path("images/productsAttr/"), $image_name);
+    
+                                ProductAttrImage::updateOrCreate(
+                                    [
+                                        'product_id' => $product->id,
+                                        'product_attr_id' => $productAttr->id,
+                                        'image' => $image_name
+                                    ],
+                                    [
+                                        'product_id' => $product->id,
+                                        'product_attr_id' => $productAttr->id,
+                                        'image' => $image_name
+                                    ]
+                                );
+                            }
                         }
                     }
 
