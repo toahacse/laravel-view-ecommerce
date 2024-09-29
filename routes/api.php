@@ -15,10 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/auth/register', [AuthController::class, 'loginUser']);
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/user', function(Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/updateUser', [AuthController::class, 'updateUser']);
+ 
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 });
 
 
