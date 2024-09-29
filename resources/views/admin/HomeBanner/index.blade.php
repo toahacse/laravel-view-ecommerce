@@ -54,7 +54,7 @@
                                         <td>{{ $list->text }}</td>
                                         <td>{{ $list->link }}</td>
                                         <td>
-                                            <img src="{{ URL::asset('images').'/'.$list->image}}" height="100px" width="100px" alt="">
+                                            <img src="{{ $list->image}}" height="100px" width="100px" alt="">
                                         </td>
                                         <td>
                                             <button type="button" onclick="saveData('{{ $list->id }}', '{{ $list->text }}', '{{ $list->link }}', '{{ $list->image }}')" class="btn btn-outline-primary mb-2"  data-bs-toggle="modal" data-bs-target="#addModal"><i class="bx bx-pen mr-1"></i>Edit </button>
@@ -120,7 +120,7 @@
                                 </div>
 
                                 <input type="hidden" name="id" id="id">
-                                
+
                                 {{-- <div class="row">
                                     <label class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
@@ -149,10 +149,10 @@
                 var key_image = "{{ URL::asset('images/upload-image.png') }}";
                 $('#photo').attr('required');
             }else{
-                var key_image = "{{ URL::asset('images')}}/"+image+"";
+                var key_image =image;
                 $('#photo').removeAttr('required');
             }
-         
+
             const html = '<img src="'+key_image+'" id="imgPreview" height="200px" width="200px" alt="">'
             $('#image_key').html(html);
         }

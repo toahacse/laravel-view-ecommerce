@@ -111,7 +111,7 @@
                                 </div>
 
                                 <input type="hidden" name="id" id="id">
-                                
+
                                 {{-- <div class="row">
                                     <label class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
@@ -139,10 +139,10 @@
                 var key_image = "{{ URL::asset('images/upload-image.png') }}";
                 $('#photo').attr('required');
             }else{
-                var key_image = "{{ URL::asset('/')}}"+image+"";
+                var key_image = image;
                 $('#photo').removeAttr('required');
             }
-         
+
             const html = '<img src="'+key_image+'" id="imgPreview" height="200px" width="200px" alt="">'
             $('#image_key').html(html);
         }

@@ -92,7 +92,7 @@
                                 </span>
                                 </div>
                             </div>
-                            
+
                             <div class="row mb-3">
                                 <label for="name" class="col-sm-3 col-form-label">Product Name</label>
                                 <div class="col-sm-9">
@@ -146,7 +146,7 @@
 
                             <div class="row mb-3">
                                 <label for="image" class="col-sm-3 col-form-label">Product Attribute</label>
-                                
+
                                 <div class="row col-sm-9">
                                     <div class="col-sm-3 mt-2">
                                         <button type="button" id="addAttributeButton" class="btn btn-info form-control">Add Attribute</button>
@@ -200,7 +200,7 @@
                                                     </div>
                                                     <div class="row mb-3 mt-3 m-0 p-0">
                                                         <label for="image" class="col-sm-3 col-form-label">Product Image</label>
-                                                        
+
                                                         <div class="row col-sm-9">
                                                             <input type="hidden" name="imageValue[]" value="{{ $count }}">
                                                             <div class="col-sm-3">
@@ -276,7 +276,7 @@
                                                 </div>
                                                 <div class="row mb-3 mt-3 m-0 p-0">
                                                     <label for="image" class="col-sm-3 col-form-label">Product Image</label>
-                                                    
+
                                                     <div class="row col-sm-9">
                                                         <input type="hidden" name="imageValue[]" value="{{ $count }}">
                                                         <div class="col-sm-3">
@@ -303,8 +303,8 @@
 
                                     </div>
                                 </div>
-                            </div>  
-                            
+                            </div>
+
                             <div class="row">
                                 <label class="col-sm-3 col-form-label"></label>
                                 <div class="col-sm-9">
@@ -333,7 +333,7 @@
                             </div>`;
 
             // let html = `<input type="file" name="attr_image[]" class="form-control" id="photo" required>`;
-            $('#'+id+'').append(html);       
+            $('#'+id+'').append(html);
         }
     </script>
     <script>
@@ -341,7 +341,7 @@
             $('#'+id+'').remove();
 
             console.log(type);
-            
+
             if(type == 'image'){
                 console.log(type, 'test');
                 $('#remove_image_div').append(`<input type="hidden" name="remove_image_id[]" value="${imgId}">`)
@@ -352,7 +352,7 @@
             $('#'+id+'').remove()
         }
     </script>
-  
+
     <script>
         var count = 111;
        $('#addAttributeButton').click(function(e){
@@ -361,7 +361,7 @@
         let html = '';
         let sizeData = $('#size_id').html();
         let colorData = $('#color_id').html();
-        
+
         html += `<div class="row" id="addAttr_${ count }">`;
         html += `<input type="hidden" name="productAttributeId[]" value="0">`;
         html += '<div class="col-sm-3 mt-2"><select class="form-control" name="color_id[]">'+colorData+'</select></div>';
@@ -389,7 +389,7 @@
                 </div>
                 <div class="row mb-3 mt-3 m-0 p-0">
                     <label for="image" class="col-sm-3 col-form-label">Product Image</label>
-                    
+
                     <div class="row col-sm-9">
                         <input type="hidden" name="imageValue[]" value="${ count }">
                         <div class="col-sm-3">
@@ -402,7 +402,7 @@
                                     <input type="file" name="attr_image_${ count }[]" class="form-control" id="photo" required>
                                 </div>
                                 <button type="button" onclick="removeAttr('attrImage_${ imageCount }')" class="btn btn-danger form-control">Remove</button>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -410,10 +410,10 @@
                 <button type="button" onclick="removeAttr('addAttr_${ count }')" class="btn btn-danger form-control">Remove Attribute</button>
                 `;
         html += `</div>`;
-        
+
         $('#addAttr').append(html);
-        
-       }); 
+
+       });
     </script>
     <script>
         $("#category_id").change(function(e) {
@@ -438,7 +438,7 @@
                             });
                         });
                         html += '</select>'
- 
+
                         $('#multiAttr').html(html);
                         $('#attribute_id').multiSelect();
                         // showAlert(result.status, result.message)
@@ -452,7 +452,7 @@
             });
         });
     </script>
-    
+
     <script>
         var editor = CKEDITOR.replace('description');
         CKFinder.setupCKEditor(editor);

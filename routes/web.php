@@ -17,7 +17,8 @@ use App\Http\Controllers\Auth\AuthController;
 */
 
 Route::get('/', function () {
-    return redirect('admin/dashboard');
+    return view('index');
+    // return redirect('admin/dashboard');
 });
 
 Route::get('/login', function () {
