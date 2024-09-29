@@ -95,6 +95,8 @@ class ProductController extends Controller
 
                 DB::beginTransaction();
 
+                ProductAttrImage::whereIn('id', $request->remove_image_id)->delete();
+                
                 $product = Product::updateOrCreate(
                     ['id' => $request->id],
                     [
@@ -149,7 +151,6 @@ class ProductController extends Controller
                             ]
                         );
                  
-                        ProductAttrImage::whereIn('id', $request->remove_image_id)->delete();
                         $imageVal = 'attr_image_'.$attrImage[$key];
                         $imageValId = 'attr_image_id_'.$attrImage[$key];
                         if($request->$imageVal){
