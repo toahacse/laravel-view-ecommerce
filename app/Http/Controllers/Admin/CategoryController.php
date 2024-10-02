@@ -16,7 +16,7 @@ class CategoryController extends Controller
 {
     use ApiResponse;
     use SaveFile;
-    
+
     public function index(){
         $data = Category::get();
         return view('admin/Category.index', compact('data'));
@@ -45,12 +45,12 @@ class CategoryController extends Controller
                     $imageName = $this->saveImage($request->image, '', 'images/categories' );
                 }
              }
- 
+
             Category::updateOrCreate(
                 ['id'=> $request->id],
                 [
                     'name' => $request->name,
-                    'slug' => $request->slug,
+                    'slug' => replaceStr($request->slug),
                     'image' => $imageName,
                     'parent_category_id' => $request->parent_category_id,
                 ]
@@ -67,7 +67,7 @@ class CategoryController extends Controller
         return view('admin/Category.index-category-attribute', get_defined_vars());
     }
 
-    
+
     public function store_category_attribute(Request $request){
         $validation = Validator::make($request->all(), [
             'category_id'  => 'required|exists:categories,id',
@@ -78,7 +78,7 @@ class CategoryController extends Controller
         if($validation->fails()){
             return $this->error($validation->errors()->first(), 400, []);
         }else{
-            
+
             CategoryAttribute::updateOrCreate(
                 ['id'=> $request->id],
                 [

@@ -48,20 +48,21 @@
                                 <div class="navbar-wrap main-menu d-none d-lg-flex">
                                     <ul class="navigation">
 
-                                        <li v-for="item in headerCategories" :key="item.id" class="has--mega--menu"><a href="#">{{ item.name }}</a>
+                                        <li v-for="item in headerCategories" :key="item.id" class="has--mega--menu">
+                                            <router-link :to="'/category/'+item.slug">{{ item.name }}</router-link>
                                             <ul class="mega-menu">
                                                 <li class="mega-menu-wrap">
                                                     <ul class="mega-menu-col">
-                                                        <li class="mega-title"><a href="shop.html">{{ item.name }}</a></li>
-                                                        <li v-for="subitem in item.subcategories" :key="subitem.id"><a href="shop-sidebar.html">{{ subitem.name }}</a></li>
+                                                        <li class="mega-title"><router-link :to="'/category/'+item.slug">{{ item.name }}</router-link></li>
+                                                        <li v-for="subitem in item.subcategories" :key="subitem.id"><router-link :to="'/category/'+subitem.slug">{{ subitem.name }}</router-link></li>
 
                                                     </ul>
                                                     <ul class="mega-menu-col sub-cat-post">
                                                         <li>
-                                                            <a href="shop-sidebar.html">
+                                                            <router-link :to="'/category/'+item.slug">
                                                                 <img :src="item.image" alt="">
                                                                 <span class="btn">{{ item.name }}</span>
-                                                            </a>
+                                                            </router-link>
                                                         </li>
                                                     </ul>
                                                 </li>

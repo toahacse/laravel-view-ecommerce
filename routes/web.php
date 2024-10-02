@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use PharIo\Manifest\AuthorCollection;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Front\HomePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +27,16 @@ Route::get('/login', function () {
 });
 
 Route::post('/login_user', [AuthController::class, 'loginUser']);
+Route::get('/changeSlug', [HomePageController::class, 'changeSlug']);
 
 Route::get('/logout', function () {
    Auth::logout();
    return redirect('/login');
 });
+
+
+Route::get('/{vue_capture?}', function () {
+    return view('index');
+})->where('vue_capture', '[\/\w\.-]*');
 
 // Route::get('/createAdmin', [AuthController::class, 'createCustomer']);

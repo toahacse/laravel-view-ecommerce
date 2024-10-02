@@ -96,12 +96,12 @@ class ProductController extends Controller
                 DB::beginTransaction();
 
                 ProductAttrImage::whereIn('id', $request->remove_image_id)->delete();
-                
+
                 $product = Product::updateOrCreate(
                     ['id' => $request->id],
                     [
                         'name'          => $request->name,
-                        'slug'          => $request->slug,
+                        'slug'          => replaceStr($request->slug),
                         'category_id'   => $request->category_id,
                         'brand_id'      => $request->brand_id,
                         'tax_id'        => $request->tax_id,
@@ -130,7 +130,7 @@ class ProductController extends Controller
                     foreach ($request->imageValue as $key => $val) {
                         array_push($attrImage, $val);
                     }
-                    
+
                     foreach ($request->sku as $key => $val) {
                         $productAttr = ProductAttr::updateOrCreate(
                             [
@@ -150,7 +150,7 @@ class ProductController extends Controller
                                 'weight'     => $request->weight[$key],
                             ]
                         );
-                 
+
                         $imageVal = 'attr_image_'.$attrImage[$key];
                         $imageValId = 'attr_image_id_'.$attrImage[$key];
                         if($request->$imageVal){
@@ -162,7 +162,7 @@ class ProductController extends Controller
                             foreach($request->$imageVal as $key=>$val){
                                 $image_name = "images/productsAttr/".$this->getRandomValue().$request->name . '-' . time() . '.' . $val->extension();
                                 $val->move(public_path("images/productsAttr/"), $image_name);
-    
+
                                 ProductAttrImage::updateOrCreate(
                                     [
                                         'product_id' => $product->id,
