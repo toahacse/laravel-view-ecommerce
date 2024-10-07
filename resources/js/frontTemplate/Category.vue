@@ -99,13 +99,7 @@
                                         <h4 class="widget-title">Product Categories</h4>
                                         <div class="shop-cat-list">
                                             <ul>
-                                                <li><a href="#">Accessories</a><span>(6)</span></li>
-                                                <li><a href="#">Computer</a><span>(4)</span></li>
-                                                <li><a href="#">Covid-19</a><span>(2)</span></li>
-                                                <li><a href="#">Electronics</a><span>(6)</span></li>
-                                                <li><a href="#">Frame Sunglasses</a><span>(12)</span></li>
-                                                <li><a href="#">Furniture</a><span>(7)</span></li>
-                                                <li><a href="#">Genuine Leather</a><span>(9)</span></li>
+                                                <li v-for="item in categories" :key="item.id"><router-link :to="'/category/'+item.slug">{{ item.name }}</router-link><span>(6)</span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -115,18 +109,24 @@
                                             <div id="slider-range"></div>
                                             <div class="price_slider_amount">
                                                 <span>Price :</span>
-                                                <input type="text" id="amount" name="price" placeholder="Add Your Price" />
+                                                <input type="text" @keypress="isNumber($event)" ref="lowPrice" id="lowPrice" placeholder="Add Your Price" />
+                                                <input type="text" @keypress="isNumber($event)" ref="highPrice" id="highPrice" placeholder="Add Your Price" />
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div v-for="item in attributes" :key="item.id" class="widget">
+                                        <h4 class="widget-title">{{ item.attribute.name }}</h4>
+                                        <div class="sidebar-brand-list">
+                                            <ul>
+                                                <li v-for="attrItem in item.attribute.values" :key="attrItem.id" :class="this.attribute.includes(attrItem.id) ? attributeColor : ''" v-on:click="addDataAttr('attribute', attrItem.id)"><a href="javascript:void(0)">{{ attrItem.value }} <i class="fas fa-angle-double-right"></i></a></li>
+                                            </ul>
                                         </div>
                                     </div>
                                     <div class="widget">
                                         <h4 class="widget-title">Product Brand</h4>
                                         <div class="sidebar-brand-list">
                                             <ul>
-                                                <li><a href="#">New Arrivals <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Clothing & Accessories <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Winter Jacket <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Baby Clothing <i class="fas fa-angle-double-right"></i></a></li>
+                                                <li v-for="item in brands" :key="item.id" :class="this.brand.includes(item.id) ? brandColor : ''" v-on:click="addDataAttr('brand', item.id)"><a href="javascript:void(0)">{{ item.text }} <i class="fas fa-angle-double-right"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -135,11 +135,7 @@
                                             <h4 class="widget-title">Product Size</h4>
                                             <div class="shop-size-list">
                                                 <ul>
-                                                    <li><a href="#">S</a></li>
-                                                    <li><a href="#">M</a></li>
-                                                    <li><a href="#">L</a></li>
-                                                    <li><a href="#">XL</a></li>
-                                                    <li><a href="#">XXL</a></li>
+                                                    <li v-for="item in sizes" :key="item.id" :class="this.size.includes(item.id) ? sizeColor : ''" v-on:click="addDataAttr('size', item.id)"><a href="javascript:void(0)">{{ item.text }}</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -147,12 +143,14 @@
                                             <h4 class="widget-title">Color</h4>
                                             <div class="shop-color-list">
                                                 <ul>
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
+                                                    <li v-for="item in colors" :key="item.id" :class="this.color.includes(item.id) ? colorColor : ''" v-on:click="addDataAttr('color', item.id)" :style="{backgroundColor: item.value}"></li>
                                                 </ul>
                                             </div>
+                                        </div>
+                                        <div class="cart-coupon">
+                                            <form>
+                                                <button type="button" v-on:click="getProducts" class="btn">Filter</button>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="widget">
@@ -216,7 +214,6 @@
                     </div>
                 </section>
                 <!-- shop-area-end -->
-
             </main>
 
         </template>
@@ -241,24 +238,98 @@ export default{
             brands:[],
             sizes:[],
             colors:[],
+            attributes:[],
             category: '',
             lowPrice: '',
             highPrice: '',
             slug: '',
+            priceRange: '',
+            brand:[],
+            size:[],
+            color:[],
+            attribute:[],
+            brandColor:'brandColor',
+            sizeColor:'sizeColor',
+            colorColor:'colorColor',
+            attributeColor:'',
+        }
+    },
+    watch:{
+        '$route'(){
+            this.getProducts();
         }
     },
     mounted(){
         this.getProducts();
     },
     methods:{
+        // showDataAttribute(){
+        //     this.getProducts();
+
+        // },
+        isNumber(evt){
+            const charcode = evt.which ? evt.which : evt.keyCode;
+            if(charcode > 31 && (charcode < 48 || charcode > 57) && charcode !== 46){
+                evt.preventDefault();
+            }
+        },
+        addDataAttr(type, value) {
+            if (type == 'brand') {
+                if (this.checkArray(type, value)) {
+                    this.brand.splice(this.brand.indexOf(value), 1); // Fixed slice to splice
+                } else {
+                    this.brand.push(value);
+                }
+            } else if (type == 'size') {
+                if (this.checkArray(type, value)) {
+                    this.size.splice(this.size.indexOf(value), 1); // Fixed slice to splice
+                } else {
+                    this.size.push(value);
+                }
+            } else if (type == 'color') {
+                if (this.checkArray(type, value)) {
+                    this.color.splice(this.color.indexOf(value), 1); // Fixed slice to splice
+                } else {
+                    this.color.push(value);
+                }
+            } else if (type == 'attribute') {
+                if (this.checkArray(type, value)) {
+                    this.attribute.splice(this.attribute.indexOf(value), 1); // Fixed slice to splice
+                } else {
+                    this.attribute.push(value);
+                }
+            }
+        },
+
+        checkArray(type, value){
+            if(type == 'brand'){
+                return this.brand.includes(value);
+            }else if(type == 'size'){
+                return this.size.includes(value);
+            }else if(type == 'color'){
+                return this.color.includes(value);
+            }else if(type == 'attribute'){
+                return this.attribute.includes(value);
+            }
+        },
+
         async getProducts(){
             try {
                 const route = useRoute();
-                this.slug = route.params.slug;
+                this.slug = this.$route.params.slug;
                 if(this.slug == '' || this.slug == undefined || this.slug == null){
-                    this.route.push({name: 'Index'});
+                    this.$router.push({name: 'Index'});
                 }else{
-                    let data = await axios.get(getUrlList().getCategoryData+'/'+this.slug);
+                    let data = await axios.post(getUrlList().getCategoryData,{
+                        'slug'      : this.slug,
+                        'attribute' : this.attribute,
+                        'lowPrice'  : this.$refs.lowPrice.value,
+                        'highPrice' : this.$refs.highPrice.value,
+                        'brand'     : this.brand,
+                        'size'      : this.size,
+                        'color'     : this.color,
+                    });
+
 
                     if(data.status == 200 && data.data.data.data.products.data.length > 0){
                         this.categories = data.data.data.data.categories;
@@ -267,8 +338,9 @@ export default{
                         this.sizes = data.data.data.data.sizes;
                         this.colors = data.data.data.data.colors;
                         this.category = data.data.data.data.banner;
-                        this.lowPrice = data.data.data.data.banner;
-                        this.highPrice = data.data.data.data.banner;
+                        this.attributes = data.data.data.data.attributes;
+                        this.$refs.lowPrice.value = data.data.data.data.lowPrice;
+                        this.$refs.highPrice.value = data.data.data.data.highPrice;
                     }else{
                         console.log('Data not found');
                     }
@@ -280,3 +352,19 @@ export default{
     }
 }
 </script>
+
+<style>
+.brandColor::before{
+    background-color: #ff5400 !important;
+}
+.sizeColor::before{
+    background-color: #ff5400 !important;
+    color: #ffffff;
+}
+.colorColor::before{
+    content: '\2713';
+    display: inline-block;
+    color: red;
+    padding: 0 6px 0 0;
+}
+</style>

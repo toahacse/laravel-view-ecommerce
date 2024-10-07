@@ -18,5 +18,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::get('/getHeaderCategoriesData', [HomePageController::class, 'getHeaderCategoriesData']);
 Route::get('/getHomeData', [HomePageController::class, 'getHomeData']);
-Route::get('/getCategoryData/{slug?}', [HomePageController::class, 'getCategoryData']);
+Route::post('/getCategoryData', [HomePageController::class, 'getCategoryData']);
+Route::get('/getProductData/{item_code?}/{slug?}', [HomePageController::class, 'getProductData']);
+Route::post('/getUserData', [HomePageController::class, 'getUserData']);
+Route::post('/getCartData', [HomePageController::class, 'getCartData']);
+Route::post('/addToCart', [HomePageController::class, 'addToCart']);
+Route::post('/removeCartData', [HomePageController::class, 'removeCartData']);
 

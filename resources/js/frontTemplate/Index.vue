@@ -1,7 +1,7 @@
 <template>
 <Layout>
 
-    <template v-slot:content>
+    <template v-slot:content="solotProps">
         <!-- slider-area -->
         <section class="slider-area position-relative">
             <div class="third-slider-active">
@@ -13,7 +13,7 @@
                                 <div class="col-lg-6">
                                     <div class="slider-content">
                                         <h2 class="title" data-animation-in="fadeInUp" data-delay-in=".4" data-duration-in="1.5">{{ item.text }}</h2>
-                                        <a href="shop-sidebar.html" class="btn" data-animation-in="fadeInUp" data-delay-in=".8" data-duration-in="1.5">Shop now</a>
+                                        <a :href="item.link" class="btn" data-animation-in="fadeInUp" data-delay-in=".8" data-duration-in="1.5">Shop now</a>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -94,13 +94,13 @@
                                         <div class="features-product-item">
                                             <div class="features-product-thumb">
                                                 <div class="discount-tag">-20%</div>
-                                                <a href="shop-details.html">
+                                                <router-link :to="'/product/'+item.item_code+'/'+item.slug">
                                                     <img :src="item.image" alt="">
-                                                </a>
+                                                </router-link>
                                                 <div class="product-overlay-action">
                                                     <ul>
                                                         <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                                        <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
+                                                        <li><router-link :to="'/product/'+item.item_code+'/'+item.slug"><i class="far fa-eye"></i></router-link></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -112,7 +112,7 @@
                                                     <i class="far fa-star"></i>
                                                     <i class="far fa-star"></i>
                                                 </div>
-                                                <h5><a href="shop-details.html">{{ item.name }}</a></h5>
+                                                <h5><router-link :to="'/product/'+item.item_code+'/'+item.slug">{{ item.name }}</router-link></h5>
                                                 <p class="price">${{ item?.product_attributes[0]?.price ?? 0 }}</p>
                                                 <div class="features-product-bottom">
                                                     <ul>
@@ -125,7 +125,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="features-product-cart"><a href="cart.html">add to cart</a></div>
+                                            <div class="features-product-cart"><a href="javascript:void(0)" @click="solotProps.addToCart(item.id, item?.product_attributes[0]?.id, 1)">add to cart</a></div>
                                         </div>
                                     </div>
 
@@ -161,16 +161,17 @@
                     <div v-for="item in homeProducts" :key="item.id" :class="'col-xl-3 col-lg-4 col-sm-6 grid-item grid-sizer category_'+item.category_id">
                         <div class="new-arrival-item text-center mb-50">
                             <div class="thumb mb-25">
-                                <a href="shop-details.html"><img :src="item.image" alt=""></a>
+                                <router-link :to="'/product/'+item.item_code+'/'+item.slug"><img :src="item.image" alt=""></router-link>
                                 <div class="product-overlay-action">
                                     <ul>
                                         <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                        <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
+                                        <li><router-link :to="'/product/'+item.item_code+'/'+item.slug"><i class="far fa-eye"></i></router-link></li>
+                                        <li><a href="javascript:void(0)" @click="solotProps.addToCart(item.id, item?.product_attributes[0]?.id, 1)"><i class="fa fa-shopping-cart"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="content">
-                                <h5><a href="shop-details.html">{{ item.name }}</a></h5>
+                                <h5><router-link :to="'/product/'+item.item_code+'/'+item.slug">{{ item.name }}</router-link></h5>
                                 <span class="price">${{ item?.product_attributes[0]?.price ?? 0 }}</span>
                             </div>
                         </div>

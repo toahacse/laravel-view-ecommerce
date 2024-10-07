@@ -42,8 +42,8 @@
                         <div class="menu-wrap">
                             <nav class="menu-nav show">
                                 <div class="logo">
-                                    <a href="index.html" class="main-logo"><img src="../assets/img/logo/fw_logo.png" alt="Logo"></a>
-                                    <a href="index.html" class="sticky-logo"><img src="../assets/img/logo/logo.png" alt="Logo"></a>
+                                    <router-link :to="'/'" class="main-logo"><img src="../assets/img/logo/fw_logo.png" alt="Logo"></router-link>
+                                    <router-link :to="'/'" class="sticky-logo"><img src="../assets/img/logo/logo.png" alt="Logo"></router-link>
                                 </div>
                                 <div class="navbar-wrap main-menu d-none d-lg-flex">
                                     <ul class="navigation">
@@ -76,47 +76,32 @@
                                 <div class="header-action d-none d-md-block">
                                     <ul>
                                         <li class="header-search"><a href="#" data-toggle="modal" data-target="#search-modal"><i class="flaticon-search"></i></a></li>
-                                        <li class="header-shop-cart"><a href="#"><i class="flaticon-shopping-bag"></i><span>0</span></a>
+                                        <li class="header-shop-cart"><a href="#"><i class="flaticon-shopping-bag"></i><span>{{ cartCount }}</span></a>
                                             <ul class="minicart">
-                                                <li class="d-flex align-items-start">
+                                                <li v-if="cartCount>0" v-for="item in cartProduct" :key="item.id"  class="d-flex align-items-start">
                                                     <div class="cart-img">
-                                                        <a href="#"><img src="../assets/img/product/cart_p01.jpg" alt=""></a>
+                                                        <a href="#"><img :src="item.products[0].image" alt=""></a>
                                                     </div>
                                                     <div class="cart-content">
-                                                        <h4><a href="#">Exclusive Winter Jackets</a></h4>
+                                                        <h4><a href="#">{{ item.products[0].name }}</a></h4>
                                                         <div class="cart-price">
-                                                            <span class="new">$229.9</span>
-                                                            <span><del>$229.9</del></span>
+                                                            <span class="new">${{ item.products[0].product_attributes[0].price }}</span>
+                                                            <span><del>${{ item.products[0].product_attributes[0].mrp }}</del></span>
                                                         </div>
                                                     </div>
                                                     <div class="del-icon">
-                                                        <a href="#"><i class="far fa-trash-alt"></i></a>
-                                                    </div>
-                                                </li>
-                                                <li class="d-flex align-items-start">
-                                                    <div class="cart-img">
-                                                        <a href="#"><img src="../assets/img/product/cart_p02.jpg" alt=""></a>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h4><a href="#">Winter Jackets For Women</a></h4>
-                                                        <div class="cart-price">
-                                                            <span class="new">$229.9</span>
-                                                            <span><del>$229.9</del></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="del-icon">
-                                                        <a href="#"><i class="far fa-trash-alt"></i></a>
+                                                        <a href="javascript:void(0)" @click="removeCartData(item.products[0].id, item.products[0].product_attributes[0].id, 1)"><i class="far fa-trash-alt"></i></a>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="total-price">
                                                         <span class="f-left">Total:</span>
-                                                        <span class="f-right">$239.9</span>
+                                                        <span class="f-right">${{ cartTotal }}</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="checkout-link">
-                                                        <a href="#">Shopping Cart</a>
+                                                        <router-link :to="'/shopping-cart'">Shopping Cart</router-link>
                                                         <a class="black-color" href="#">Checkout</a>
                                                     </div>
                                                 </li>
@@ -282,7 +267,7 @@
     <!-- header-area-end -->
 
     <main>
-        <slot name="content"></slot>
+        <slot name="content" :addToCart="addToCart" :cartCount="cartCount" :cartProduct="cartProduct" :cartTotal="cartTotal" :removeCartData="removeCartData"></slot>
     </main>
 
     <!-- footer-area -->
@@ -358,6 +343,21 @@ import getUrlList from '../provider';
             return {
                 result:[],
                 headerCategories:[],
+                user_info:{
+                    'user_id': '',
+                    'auth' : false
+                },
+                cartCount: 0,
+                cartProduct: [],
+                cartTotal: 0,
+            }
+        },
+        watch:{
+            cartProduct(val){
+                this.cartTotal = 0;
+                for(var item in val){
+                    this.cartTotal += val[item].qty * val[item].products[0].product_attributes[0].price
+                }
             }
         },
         mounted(){
@@ -378,8 +378,94 @@ import getUrlList from '../provider';
                 document.getElementById('scripts').appendChild(script);
             }
             this.getCategories();
+            this.getUser();
+            this.getCartData();
         },
         methods:{
+            async removeCartData(product_id, product_attr_id, qty){
+                try {
+                    let data = await axios.post(getUrlList().removeCartData,{
+                        'token' : this.user_info.user_id,
+                        'auth' : this.user_info.auth,
+                        'product_id' : product_id,
+                        'product_attr_id' : product_attr_id,
+                        'qty' : qty,
+                    })
+                    if(data.status == 200){
+                        this.getCartData();
+                    }else{
+                        console.log('Data not found');
+                    }
+                } catch (error) {
+                    console.log('Data not found');
+                }
+            },
+            async addToCart(product_id, product_attr_id, qty){
+                try {
+                    let data = await axios.post(getUrlList().addToCart,{
+                        'token' : this.user_info.user_id,
+                        'auth' : this.user_info.auth,
+                        'product_id' : product_id,
+                        'product_attr_id' : product_attr_id,
+                        'qty' : qty,
+                    })
+                    if(data.status == 200){
+                        this.getCartData();
+                    }else{
+                        console.log('Data not found');
+                    }
+                } catch (error) {
+                    console.log('Data not found');
+                }
+            },
+            async getCartData(){
+                try {
+                    let data = await axios.post(getUrlList().getCartData,{
+                        'token' : this.user_info.user_id,
+                        'auth' : this.user_info.auth,
+                    })
+                    if(data.status == 200){
+                        this.cartCount = data.data.data.data.length
+                        this.cartProduct = data.data.data.data
+                    }else{
+                        console.log('Data not found');
+                    }
+                } catch (error) {
+                    console.log('Data not found');
+                }
+            },
+            async getUser(){
+                if(localStorage.getItem('user_info')){
+                    var user = localStorage.getItem('user_info');
+                    var testUser = JSON.parse(user);
+                    this.user_info.user_id = testUser.user_id
+                    this.getUserData();
+                }else{
+                    this.getUserData();
+                }
+            },
+            async getUserData(){
+                try {
+                    let data = await axios.post(getUrlList().getUserData,{
+                        'token' : this.user_info.user_id,
+                    })
+                    if(data.status == 200){
+                        if(data.data.data.data.user_type == 1){
+                            this.user_info.auth=true;
+                            this.user_info.user_id=data.data.data.data.token;
+                            localStorage.setItem('user_info', JSON.stringify(this.user_info));
+                        }else{
+                            this.user_info.auth=false;
+                            this.user_info.user_id=data.data.data.data.token;
+                            localStorage.setItem('user_info', JSON.stringify(this.user_info));
+                        }
+                    }else{
+                        console.log('Data not found');
+                    }
+                } catch (error) {
+                    console.log('Data not found');
+                }
+            },
             async getCategories(){
                 try {
                     let data = await axios.get(getUrlList().getHeaderCategoriesData);
