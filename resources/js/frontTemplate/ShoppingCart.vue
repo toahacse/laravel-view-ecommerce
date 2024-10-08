@@ -66,12 +66,12 @@
                                 <div class="shop-cart-bottom mt-20">
                                     <div class="cart-coupon">
                                         <form action="#">
-                                            <input type="text" placeholder="Enter Coupon Code...">
-                                            <button class="btn">Apply Coupon</button>
+                                            <input type="text" ref="couponName" :value="solotProps.couponName" placeholder="Enter Coupon Code...">
+                                            <button type="button" class="btn" @click="solotProps.addCoupon(this.$refs.couponName.value)">Apply Coupon</button>
                                         </form>
                                     </div>
                                     <div class="continue-shopping">
-                                        <a href="shop.html" class="btn">update shopping</a>
+                                        <a href="javascript:void(0)" @click="solotProps.getCartData(),solotProps.removeCoupon(),this.$refs.couponName.value=''" class="btn">Remove Coupon</a>
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                                             </li>
                                             <li class="cart-total-amount"><span>TOTAL</span> <span class="amount">$ {{ solotProps.cartTotal }}</span></li>
                                         </ul>
-                                        <a href="checkout.html" class="btn">PROCEED TO CHECKOUT</a>
+                                        <router-link :to="'/checkout'" class="btn">PROCEED TO CHECKOUT</router-link>
                                     </form>
                                 </div>
                             </div>
@@ -122,7 +122,12 @@ export default{
     },
     data(){
         return {
-            slug: '',
+            couponName: '',
+        }
+    },
+    watch:{
+        couponName(val){
+            this.couponName = val.replace('/\s+/g','')
         }
     }
 }

@@ -24,4 +24,9 @@ Route::post('/getUserData', [HomePageController::class, 'getUserData']);
 Route::post('/getCartData', [HomePageController::class, 'getCartData']);
 Route::post('/addToCart', [HomePageController::class, 'addToCart']);
 Route::post('/removeCartData', [HomePageController::class, 'removeCartData']);
+Route::post('/addCoupon', [HomePageController::class, 'addCoupon']);
+Route::post('/getUserCoupon', [HomePageController::class, 'getUserCoupon']);
+Route::post('/removeCoupon', [HomePageController::class, 'removeCoupon']);
+Route::post('/getPincodeData', [HomePageController::class, 'getPincodeData']);
+Route::post('/placeOrder', [HomePageController::class, 'placeOrder']);
 

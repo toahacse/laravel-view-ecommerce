@@ -1,16 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomeBannerController;
-use App\Http\Controllers\Admin\SizeController;
-use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\AttributeController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\TaxController;
-use App\Http\Controllers\Admin\ProductController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function() {
     return view('admin/index');
@@ -31,6 +32,10 @@ Route::post('updateSize', [SizeController::class, 'store']);
 //manage-color route
 Route::get('manage-color', [ColorController::class, 'index']);
 Route::post('updateColor', [ColorController::class, 'store']);
+
+//manage-Coupon route
+Route::get('manage-coupon', [CouponController::class, 'index']);
+Route::post('updateCoupon', [CouponController::class, 'store']);
 
 //manage-attribute route
 Route::get('attribute-name', [AttributeController::class, 'index_attribute_name']);

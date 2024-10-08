@@ -16,6 +16,12 @@ use Illuminate\Http\Request;
 use App\Models\CategoryAttribute;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
+use App\Models\Pincode;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\UserCoupon;
+use Illuminate\Support\Facades\Hash;
 use SebastianBergmann\Template\Template;
 use Illuminate\Support\Facades\Validator;
 
@@ -260,5 +266,149 @@ class HomePageController extends Controller
             }
             return $this->success(['data' => ''], 'Successfully data fetched');
         }
+    }
+
+    public function addCoupon(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token'             => 'required|exists:temp_users,token',
+            'coupon'        => 'required|exists:coupons,name',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->error($validation->errors()->first(), 400, []);
+        } else {
+            $coupon = Coupon::where('name', $request->coupon)->first();
+            $user = TempUsers::where('token', $request->token)->first();
+
+            if($coupon->minValue <= $request->cartTotal){
+                $couponValue = $coupon->value;
+                if($coupon->type == 1){
+                   $cartTotal = $request->cartTotal - $couponValue;
+                }else{
+                    $couponValue = $couponValue / 100;
+                    $couponValue = $request->cartTotal * $couponValue;
+                    $cartTotal = $request->cartTotal - $couponValue;
+                }
+                UserCoupon::updateOrCreate(
+                    [
+                        'user_id' => $user->user_id
+                    ],
+                    [
+                        'user_id' => $user->user_id,
+                        'coupon_id' => $coupon->id,
+                    ]
+                );
+                return $this->success(['data' => $cartTotal, 'couponName'=>$coupon->name ?? ''], 'Successfully data fetched');
+            }else{
+                return $this->error('Coupon not found', 400, []);
+            }
+        }
+    }
+
+    public function removeCoupon(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token'             => 'required|exists:temp_users,token',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->error($validation->errors()->first(), 400, []);
+        } else {
+            $user = TempUsers::where('token', $request->token)->first();
+            $couponUser = UserCoupon::where('user_id', $user->user_id)->delete();
+
+            return $this->success(['data' => ''], 'Successfully Removed');
+        }
+    }
+
+    public function getUserCoupon(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token'             => 'required|exists:temp_users,token',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->error($validation->errors()->first(), 400, []);
+        } else {
+            $user = TempUsers::where('token', $request->token)->first();
+            $couponUser = UserCoupon::where('user_id', $user->user_id)->first();
+
+            if(isset($couponUser->id)){
+                $coupon = Coupon::where('id', $couponUser->coupon_id)->first();
+
+                if($coupon->minValue <= $request->cartTotal){
+                    $couponValue = $coupon->value;
+                    if($coupon->type == 1){
+                       $cartTotal = $request->cartTotal - $couponValue;
+                    }else{
+                        $couponValue = $couponValue / 100;
+                        $couponValue = $request->cartTotal * $couponValue;
+                        $cartTotal = $request->cartTotal - $couponValue;
+                    }
+                }else{
+                    $cartTotal = $request->cartTotal;
+                }
+            }else{
+                $cartTotal = $request->cartTotal;
+            }
+            return $this->success(['data' => $cartTotal, 'couponName'=>$coupon->name ?? ''], 'Successfully data fetched');
+
+        }
+    }
+
+    public function getPincodeData(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token'   => 'required|exists:temp_users,token',
+            'pincode'   => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->error($validation->errors()->first(), 400, []);
+        } else {
+            $pincode = Pincode::where('postCode', $request->pincode)->first();
+            return $this->success(['data' => $pincode], 'Successfully data fetched');
+
+        }
+    }
+
+    public function placeOrder(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token'         => 'required|exists:temp_users,token',
+            'firstName'     => 'required|max:255',
+            'lastName'      => 'required|max:255',
+            'email'         => 'required|max:255',
+            'address'       => 'required|max:255',
+            'country'       => 'required|max:255',
+            'city'          => 'required|max:255',
+            'state'         => 'required|max:255',
+            'pincode'       => 'required|max:255',
+            'phone'         => 'required|max:255',
+            'paymentMethod' => 'required|max:255',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->error($validation->errors()->first(), 400, []);
+        } else {
+            $user_id = $this->createUser($request->all());
+
+            return $this->success(['data' => $user_id], 'Successfully data fetched');
+        }
+    }
+
+    public function createUser($data){
+        $user = User::create([
+            'name' => $data['firstName'].' '.$data['lastName'],
+            'password' => Hash::make($data['firstName'].'@123') ,
+            'email' => $data['email'],
+        ]);
+
+
+      $customer = Role::where('slug','customer')->first();
+
+      $user->roles()->attach($customer);
+      return $user->id;
     }
 }

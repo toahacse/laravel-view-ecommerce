@@ -9,6 +9,11 @@ export function getUrlList(){
         getCartData : `${baseUrl}/getCartData`,
         addToCart : `${baseUrl}/addToCart`,
         removeCartData : `${baseUrl}/removeCartData`,
+        addCoupon : `${baseUrl}/addCoupon`,
+        getUserCoupon : `${baseUrl}/getUserCoupon`,
+        removeCoupon : `${baseUrl}/removeCoupon`,
+        getPincodeData : `${baseUrl}/getPincodeData`,
+        placeOrder : `${baseUrl}/placeOrder`,
     }
 }
 
